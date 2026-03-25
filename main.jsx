@@ -1,9 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import DonationApp from './DonationApp.jsx'
+import { BrowserRouter } from 'react-router-dom'
+import App from './src/App.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <DonationApp />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 )
