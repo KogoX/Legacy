@@ -43,9 +43,11 @@ export default function Layout() {
           --text-muted: #414942;
           --text-faint: #717971;
           --error: #ba1a1a;
+          --nav-height: 72px;
         }
 
         body { background: var(--cream); color: var(--text); font-family: 'Source Sans 3', sans-serif; }
+        img, svg { max-width: 100%; height: auto; }
 
         /* ── NAV ── */
         .nav {
@@ -54,7 +56,7 @@ export default function Layout() {
           padding: 0 2rem;
         }
         .nav.scrolled { background: rgba(252,249,244,0.92); backdrop-filter: blur(16px); box-shadow: 0 1px 0 var(--cream-low); }
-        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 72px; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: var(--nav-height); gap: 1rem; }
         .nav-logo { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.25rem; color: var(--green); letter-spacing: -0.02em; text-decoration: none; }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
@@ -63,19 +65,46 @@ export default function Layout() {
         .nav-cta:hover { opacity: 0.88; }
         
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--green); cursor: pointer; }
-        .mobile-nav { display: none; position: absolute; top: 72px; left: 0; width: 100%; background: var(--cream); flex-direction: column; padding: 2rem 1.25rem; gap: 1.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 1px solid var(--cream-low); }
+        .mobile-nav { display: none; position: absolute; top: var(--nav-height); left: 0; width: 100%; background: var(--cream); flex-direction: column; padding: 2rem 1.25rem; gap: 1.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 1px solid var(--cream-low); max-height: calc(100vh - var(--nav-height)); overflow-y: auto; }
         .mobile-nav.open { display: flex; animation: fadeDown 0.3s ease; }
         .mobile-nav a { font-size: 1.1rem; color: var(--text); text-decoration: none; font-weight: 600; }
         .mobile-nav .nav-cta { margin-top: 1rem; width: 100%; padding: 1rem; z-index: 100; }
 
         @media (max-width: 768px) {
+          :root { --nav-height: 64px; }
           .nav-links { display: none; }
           .mobile-menu-btn { display: block; }
           .nav { padding: 0 1.25rem; }
+          .nav-logo { font-size: 1.1rem; }
           .hero, .stats { padding-left: 1.25rem; padding-right: 1.25rem; }
           .donation-section { padding: 4rem 1.25rem; gap: 3rem; }
           .form-card { padding: 1.5rem; }
           .stats-inner { gap: 2.5rem; }
+          .editorial { position: static; }
+        }
+        @media (max-width: 520px) {
+          .nav { padding: 0 1rem; }
+          .hero { min-height: auto; padding: 5.5rem 1rem 3.5rem; }
+          .hero-title { font-size: clamp(2.2rem, 9vw, 3.4rem); }
+          .hero-sub { font-size: 1rem; margin-bottom: 2rem; }
+          .hero-scroll { display: none; }
+          .stats { padding: 3rem 1rem; }
+          .stat-num { font-size: 2.2rem; }
+          .donation-section { padding: 3.5rem 1rem; gap: 2.5rem; }
+          .trust-items { padding: 1.2rem; }
+          .trust-item { gap: 0.75rem; }
+          .form-card { padding: 1.25rem; }
+          .amount-btn { padding: 0.85rem 0.5rem; font-size: 1.05rem; }
+          .success-actions { flex-direction: column; align-items: stretch; }
+          .btn-primary, .btn-secondary { width: 100%; }
+          .page-container { padding: 4.5rem 1rem; }
+          .page-header { margin-bottom: 2.5rem; }
+          .page-header h1 { font-size: clamp(2.1rem, 8vw, 2.8rem); }
+          .page-header p { font-size: 1rem; }
+          .page-content { gap: 1.5rem; }
+          .footer { padding: 2.5rem 1rem; }
+          .footer-inner { flex-direction: column; align-items: flex-start; }
+          .footer-links { gap: 1rem; }
         }
         @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -267,7 +296,7 @@ export default function Layout() {
         )}
       </header>
 
-      <main style={{ minHeight: '100vh', paddingTop: '72px' }}>
+      <main style={{ minHeight: '100vh', paddingTop: 'var(--nav-height)' }}>
         <Outlet />
       </main>
 
