@@ -1,13 +1,5 @@
-// supabase/functions/create-payment-intent/index.ts
-// Deploy with: supabase functions deploy create-payment-intent
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
-
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
-  apiVersion: "2023-10-16",
-  httpClient: Stripe.createFetchHttpClient(),
-});
+import Stripe from "npm:stripe@13.3.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,10 +7,21 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+
+  const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (!stripeKey) {
+    return new Response(
+      JSON.stringify({ error: "Server Configuration Error: STRIPE_SECRET_KEY is missing." }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const stripe = new Stripe(stripeKey, {
+    apiVersion: "2023-10-16",
+  });
 
   try {
     const { amount, currency = "usd", email, name } = await req.json();
@@ -30,7 +33,6 @@ serve(async (req) => {
       );
     }
 
-    // Create or retrieve Stripe customer
     const customers = await stripe.customers.list({ email, limit: 1 });
     let customer = customers.data[0];
 
@@ -38,9 +40,8 @@ serve(async (req) => {
       customer = await stripe.customers.create({ email, name });
     }
 
-    // Create PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,          // in cents
+      amount,
       currency,
       customer: customer.id,
       receipt_email: email,
@@ -53,10 +54,12 @@ serve(async (req) => {
       JSON.stringify({ clientSecret: paymentIntent.client_secret }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
+
   } catch (error) {
-    console.error("Error creating payment intent:", error);
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    console.error("Error:", errorMessage);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

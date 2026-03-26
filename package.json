@@ -10,12 +10,13 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^3.0.0",
-    "@supabase/supabase-js": "^2.39.0",
+    "@supabase/supabase-js": "^2.100.0",
     "icons": "^1.0.0",
     "lucide-react": "^1.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.2",
+    "stripe": "^21.0.0",
     "supabase": "^2.84.4"
   },
   "devDependencies": {
