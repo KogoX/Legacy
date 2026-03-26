@@ -1,32 +1,3 @@
-# The Curated Legacy — Donation App
-
-<p align="center">
-  <b>React + Supabase + Stripe Integration</b>
-</p>
-
----
-
-## 🏗 Project Structure
-
-```text
-donation-app/
-├── src/
-│   └── DonationApp.jsx                 ← Main React component
-├── supabase/
-│   ├── functions/
-│   │   └── create-payment-intent/      
-│   │       ├── index.ts                ← Edge Function (creates Stripe PaymentIntent)
-│   │       └── deno.json               ← Function configuration
-│   └── migrations/
-│       └── 001_create_donations.sql    ← Database schema
-├── index.html
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
----
-
 ## 🚀 Setup Guide
 
 ### 1. Install Dependencies
@@ -43,13 +14,16 @@ Open `src/DonationApp.jsx` and replace the placeholders at the top of the file:
 
 ```javascript
 const STRIPE_PUBLISHABLE_KEY = "pk_test_YOUR_STRIPE_PUBLISHABLE_KEY";
-const SUPABASE_URL           = "https://YOUR_PROJECT.supabase.co";
-const SUPABASE_ANON_KEY      = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 ```
 
 Where to find your keys:
-- **Stripe**: [Dashboard > API Keys](https://dashboard.stripe.com/apikeys) (Use the "Publishable key")
-- **Supabase**: [Project Settings > API](https://supabase.com/dashboard) (URL and `anon` public key)
+
+- **Stripe**: [Dashboard > API Keys](https://dashboard.stripe.com/apikeys) (Use
+  the "Publishable key")
+- **Supabase**: [Project Settings > API](https://supabase.com/dashboard) (URL
+  and `anon` public key)
 
 ### 3. Set Up the Supabase Database
 
@@ -61,7 +35,8 @@ Where to find your keys:
 supabase/migrations/001_create_donations.sql
 ```
 
-> **Note:** This automatically sets up the `donations` table and enables Row Level Security (RLS).
+> **Note:** This automatically sets up the `donations` table and enables Row
+> Level Security (RLS).
 
 ### 4. Deploy the Edge Function
 
@@ -71,7 +46,8 @@ Install the Supabase CLI globally if you haven't already:
 npm install -g supabase
 ```
 
-Link your local project to your remote Supabase instance and deploy the function:
+Link your local project to your remote Supabase instance and deploy the
+function:
 
 ```bash
 supabase login
@@ -79,7 +55,8 @@ supabase link --project-ref YOUR_PROJECT_REF
 supabase functions deploy create-payment-intent
 ```
 
-Finally, set your Stripe secret key securely as an environment variable in the Edge Function:
+Finally, set your Stripe secret key securely as an environment variable in the
+Edge Function:
 
 ```bash
 supabase secrets set STRIPE_SECRET_KEY=sk_test_YOUR_STRIPE_SECRET_KEY
@@ -101,30 +78,38 @@ Compile the application for deployment:
 npm run build
 ```
 
-> You can then deploy the resulting `dist/` folder to Vercel, Netlify, or any static hosting provider.
+> You can then deploy the resulting `dist/` folder to Vercel, Netlify, or any
+> static hosting provider.
 
 ---
 
 ## ⚙️ How It Works
 
 1. **User interaction:** The user fills out the donation form on the frontend.
-2. **Backend initialization:** React calls the Supabase Edge Function (`create-payment-intent`).
-3. **Stripe configuration:** The Edge Function creates a Stripe `PaymentIntent` and securely returns the `client_secret`.
-4. **Client confirmation:** React calls `stripe.confirmCardPayment(clientSecret, cardElement)`.
+2. **Backend initialization:** React calls the Supabase Edge Function
+   (`create-payment-intent`).
+3. **Stripe configuration:** The Edge Function creates a Stripe `PaymentIntent`
+   and securely returns the `client_secret`.
+4. **Client confirmation:** React calls
+   `stripe.confirmCardPayment(clientSecret, cardElement)`.
 5. **Processing:** Stripe charges the credit card.
-6. **Database recording:** React inserts a record of the donation into the Supabase `donations` table.
-7. **Completion:** A success screen is shown to the user, and an email receipt is dispatched by Stripe.
+6. **Database recording:** React inserts a record of the donation into the
+   Supabase `donations` table.
+7. **Completion:** A success screen is shown to the user, and an email receipt
+   is dispatched by Stripe.
 
 ---
 
 ## 💳 Stripe Test Cards
 
-Use the following test credit card numbers to simulate payments in your local environment without using real money. Provide any future expiration date and any 3-digit CVC code.
+Use the following test credit card numbers to simulate payments in your local
+environment without using real money. Provide any future expiration date and any
+3-digit CVC code.
 
-| Scenario | Card Number |
-|----------|-------------|
+| Scenario               | Card Number           |
+| ---------------------- | --------------------- |
 | **Successful Payment** | `4242 4242 4242 4242` |
-| **Card Declined** | `4000 0000 0000 0002` |
+| **Card Declined**      | `4000 0000 0000 0002` |
 | **Insufficient Funds** | `4000 0000 0000 9995` |
 
 ---
@@ -133,12 +118,16 @@ Use the following test credit card numbers to simulate payments in your local en
 
 When you are ready to process real transactions:
 
-1. Replace your `pk_test_...` key with your **Live** Publishable Key (`pk_live_...`) in `src/DonationApp.jsx`.
-2. Update your Supabase secret from your test secret key to your **Live** Secret Key (`sk_live_...`):
+1. Replace your `pk_test_...` key with your **Live** Publishable Key
+   (`pk_live_...`) in `src/DonationApp.jsx`.
+2. Update your Supabase secret from your test secret key to your **Live** Secret
+   Key (`sk_live_...`):
    ```bash
    supabase secrets set STRIPE_SECRET_KEY=sk_live_YOUR_STRIPE_SECRET_KEY
    ```
-3. *(Highly Recommended)* Set up a Stripe webhook endpoint to handle `payment_intent.succeeded` events to ensure database finality regardless of client-side disconnects.
+3. _(Highly Recommended)_ Set up a Stripe webhook endpoint to handle
+   `payment_intent.succeeded` events to ensure database finality regardless of
+   client-side disconnects.
 
 ---
 
