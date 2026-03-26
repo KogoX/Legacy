@@ -1,0 +1,16 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:stripe@21": "21.0.0"
+  },
+  "npm": {
+    "stripe@21.0.0": {
+      "integrity": "sha512-VlQ1QhjQAhmCgY3g3BgfZFLo8AkJw1r9zTrG4hdjSDX2AcwS5sPz4eHJG0zfzCO8zO/md0Xe+zrkxRqg604ZWA=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:stripe@21"
+    ]
+  }
+}

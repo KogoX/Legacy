@@ -1,8 +1,8 @@
 {
     "git.ignoreLimitWarning": true,
-    "deno.enable": false,
     "deno.enablePaths": [
         "supabase/functions"
     ],
+    "deno.config": "supabase/functions/deno.json",
     "deno.unstable": true
-}
+}
