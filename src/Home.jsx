@@ -278,7 +278,7 @@ export default function Home() {
         </div>
 
         {/* Form Card */}
-        <div className="form-card">
+        <div className="form-card donation-form-sticky">
           {donated ? (
             <SuccessState
               amount={finalAmount}

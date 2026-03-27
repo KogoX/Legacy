@@ -91,6 +91,19 @@ export default function Layout() {
           .stats { padding: 3rem 1rem; }
           .stat-num { font-size: 2.2rem; }
           .donation-section { padding: 3.5rem 1rem; gap: 2.5rem; }
+          .donation-section { padding-bottom: 18rem; }
+          .donation-form-sticky {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -6px 20px rgba(28,28,25,0.12);
+            max-height: 70vh;
+            overflow: auto;
+            z-index: 60;
+          }
           .trust-items { padding: 1.2rem; }
           .trust-item { gap: 0.75rem; }
           .form-card { padding: 1.25rem; }
